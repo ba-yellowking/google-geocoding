@@ -1,13 +1,16 @@
 import './App.css';
 import axios from "axios";
 import { useState } from "react";
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 
 function App() {
 
   const apiKey = import.meta.env.VITE_API_KEY;
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+
+  // google maps states
+  const [zoom, setZoom] = useState(10);
 
   type GoogleGeocodingResponse = {
     results: { geometry: { location: { lat: number; lng: number } } }[];
@@ -50,10 +53,18 @@ function App() {
         </form>
 
         {coordinates && (
-          <Map
-            center={coordinates}
-            zoom={12}
-          />
+          <div className="mapbox">
+            <Map
+              center={coordinates}
+              zoom={zoom}
+              onCameraChanged={(ev) => {
+                setCoordinates(ev.detail.center);
+                setZoom(ev.detail.zoom);
+              }}
+            >
+              <Marker position={coordinates} />
+            </Map>
+          </div>
         )}
 
         {!coordinates && (
