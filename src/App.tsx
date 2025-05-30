@@ -1,7 +1,7 @@
 import './App.css';
 import axios from "axios";
 import { useState } from "react";
-import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
 
 function App() {
 
@@ -13,7 +13,12 @@ function App() {
   const [zoom, setZoom] = useState(10);
 
   type GoogleGeocodingResponse = {
-    results: { geometry: { location: { lat: number; lng: number } } }[];
+    results: {
+      geometry: {
+        location: { lat: number; lng: number };
+      };
+      types: string[];
+    }[];
     status: "OK" | "ZERO_RESULTS";
   };
 
@@ -25,12 +30,30 @@ function App() {
     axios
       .get<GoogleGeocodingResponse>(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`)
       .then((response) => {
-        console.log(response.data)
         if (response.data.status !== "OK") {
           throw new Error("Could not fetch location!");
         }
+
         const coords = response.data.results[0].geometry.location;
+        const types = response.data.results[0].types;
+        console.log('Location types:', types);
+
+        let zoomLevel = 10; // default
+
+        if (types.includes("street_address") || types.includes("premise")) {
+          zoomLevel = 17;
+        } else if (types.includes("route")) {
+          zoomLevel = 15;
+        } else if (types.includes("locality")) {
+          zoomLevel = 12;
+        } else if (types.includes("administrative_area_level_1")) {
+          zoomLevel = 8;
+        } else if (types.includes("country")) {
+          zoomLevel = 5;
+        }
+
         setCoordinates(coords);
+        setZoom(zoomLevel);
       })
       .catch((error) => {
         alert(error.message);
@@ -61,6 +84,7 @@ function App() {
                 setCoordinates(ev.detail.center);
                 setZoom(ev.detail.zoom);
               }}
+              zoomControl={true}
             >
               <Marker position={coordinates} />
             </Map>

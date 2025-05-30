@@ -5,12 +5,22 @@
   margin: 0;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
 .map-container {
+  margin: 0 auto;
   position: relative;
   width: 500px;
   height: 500px;
   display: flex;
   flex-direction: column;
+  border: 1px solid #222;
 }
 
 form {
