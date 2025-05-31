@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from "react";
-import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker, type MapMouseEvent } from '@vis.gl/react-google-maps';
 import {createSearchAddressHandler} from "./services/SearchAddress.tsx";
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [zoom, setZoom] = useState(10);
 
+  // identifying user's location
   useEffect(() => {
     if (!coordinates) {
       navigator.geolocation.getCurrentPosition(
@@ -20,7 +21,7 @@ function App() {
         },
         (error) => {
           console.warn("Geolocation error:", error.message);
-          setCoordinates({ lat: 51.1605, lng: 71.4704 });
+          setCoordinates({ lat: 51.1655126, lng: 71.4272222 });
           setZoom(12);
         }
       );
@@ -28,6 +29,13 @@ function App() {
   }, []);
 
   const searchAddressHandler = createSearchAddressHandler(apiKey, address, setCoordinates, setZoom);
+
+  const [position, setPosition]= useState<{ lat: number; lng: number } | null>(null)
+  function handleMapClick(event: MapMouseEvent) {
+    const latLng = event.detail.latLng;
+    console.log(latLng)
+    setPosition(latLng)
+  }
 
   return (
     <APIProvider apiKey={apiKey}>
@@ -53,9 +61,9 @@ function App() {
                 setZoom(ev.detail.zoom);
               }}
               zoomControl={true}
-            >
-              <Marker position={coordinates} />
-            </Map>
+              onClick={handleMapClick}
+            />
+            <Marker position={position} />
           </div>
         ) : (
           <div>

@@ -25,6 +25,13 @@ export function createSearchAddressHandler(
         const coords = response.data.results[0].geometry.location;
         const types = response.data.results[0].types;
 
+        const defaultCity = {
+          lat: coords.lat,
+          lng: coords.lng
+        }
+
+        console.log(defaultCity)
+
         let zoomLevel = 10;
         if (types.includes("street_address") || types.includes("premise")) {
           zoomLevel = 17;
