@@ -1,41 +1,69 @@
 * {
   box-sizing: border-box;
-  outline: none;
   padding: 0;
   margin: 0;
+  outline: none;
 }
 
 body {
+  font-family: 'Segoe UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .map-container {
-  margin: 0 auto;
-  position: relative;
   width: 500px;
-  height: 500px;
+  height: 600px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #222;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #ffffff;
 }
 
 form {
-  margin: 1rem;
   display: flex;
-  gap: 0.5rem;
-  z-index: 1;
+  gap: 8px;
+  padding: 16px;
+  background: #f3f3f3;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.map-container > div {
-  flex-grow: 1;
-  position: relative;
+input {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border 0.3s ease;
+}
+
+input:focus {
+  border-color: #1976d2;
+}
+
+button {
+  background-color: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1565c0;
 }
 
 .mapbox {
-  height: 500px;
+  position: relative;
+  height: 100%;
   width: 100%;
 }
